@@ -1,11 +1,11 @@
 // 📝 七十二变·译真经 - Markdown 翻译服务
 
-import { readFileSync, writeFileSync, existsSync } from 'fs';
-import { dirname, basename, extname, join } from 'path';
-import chalk from 'chalk';
-import matter from 'gray-matter';
-import type { AIProvider } from '../providers/ai-provider.js';
-import { createAIProvider, MockProvider } from '../providers/ai-provider.js';
+import { readFileSync, writeFileSync, existsSync } from "fs";
+import { dirname, basename, extname, join } from "path";
+import chalk from "chalk";
+import matter from "gray-matter";
+import type { AIProvider } from "../providers/ai-provider.js";
+import { createAIProvider, MockProvider } from "../providers/ai-provider.js";
 
 export interface MarkdownTranslateResult {
   sourceFile: string;
@@ -26,7 +26,7 @@ export class MarkdownTranslator {
   private blockCounter = 0;
 
   constructor(config: {
-    provider: 'openai' | 'anthropic' | 'local';
+    provider: "openai" | "anthropic" | "local";
     apiKey?: string;
     baseUrl?: string;
     model?: string;
@@ -44,17 +44,17 @@ export class MarkdownTranslator {
    */
   async translate(
     filePath: string,
-    targetLang: string = 'zh-CN',
+    targetLang: string = "zh-CN",
     outputPath?: string,
-    keepFrontmatter: boolean = true
+    keepFrontmatter: boolean = true,
   ): Promise<MarkdownTranslateResult> {
     // 1. 读取文件
     if (!existsSync(filePath)) {
       throw new Error(`文件不存在: ${filePath}`);
     }
 
-    const content = readFileSync(filePath, 'utf-8');
-    
+    const content = readFileSync(filePath, "utf-8");
+
     // 2. 解析 frontmatter
     const parsed = matter(content);
     const frontmatter = parsed.data;
@@ -68,8 +68,11 @@ export class MarkdownTranslator {
     body = this.protectHtmlTags(body);
 
     // 记录保护块数量（在恢复前）
-    const codeBlocksCount = this.getProtectedCount('codeblock') + this.getProtectedCount('inlinecode');
-    const linksCount = this.getProtectedCount('link') + this.getProtectedCount('image');
+    const codeBlocksCount =
+      this.getProtectedCount("codeblock") +
+      this.getProtectedCount("inlinecode");
+    const linksCount =
+      this.getProtectedCount("link") + this.getProtectedCount("image");
 
     // 4. 翻译正文
     const translatedBody = await this.translateBody(body, targetLang);
@@ -81,17 +84,21 @@ export class MarkdownTranslator {
     let output: string;
     if (keepFrontmatter && Object.keys(frontmatter).length > 0) {
       // 翻译 frontmatter 中的特定字段（如 title, description）
-      const translatedFrontmatter = await this.translateFrontmatter(frontmatter, targetLang);
+      const translatedFrontmatter = await this.translateFrontmatter(
+        frontmatter,
+        targetLang,
+      );
       output = matter.stringify(finalBody, translatedFrontmatter);
     } else {
       output = finalBody;
     }
 
     // 7. 确定输出路径
-    const finalOutputPath = outputPath || this.generateOutputPath(filePath, targetLang);
+    const finalOutputPath =
+      outputPath || this.generateOutputPath(filePath, targetLang);
 
     // 8. 写入文件
-    writeFileSync(finalOutputPath, output, 'utf-8');
+    writeFileSync(finalOutputPath, output, "utf-8");
 
     return {
       sourceFile: filePath,
@@ -99,7 +106,7 @@ export class MarkdownTranslator {
       targetLang,
       charsTranslated: body.length,
       codeBlocksProtected: codeBlocksCount,
-      linksProtected: linksCount
+      linksProtected: linksCount,
     };
   }
 
@@ -110,7 +117,7 @@ export class MarkdownTranslator {
     // 匹配 ```...``` 格式的代码块
     const codeBlockRegex = /```[\s\S]*?```/g;
     return content.replace(codeBlockRegex, (match) => {
-      return this.protectBlock(match, 'codeblock');
+      return this.protectBlock(match, "codeblock");
     });
   }
 
@@ -121,7 +128,7 @@ export class MarkdownTranslator {
     // 匹配 `...` 格式的行内代码
     const inlineCodeRegex = /`[^`]+`/g;
     return content.replace(inlineCodeRegex, (match) => {
-      return this.protectBlock(match, 'inlinecode');
+      return this.protectBlock(match, "inlinecode");
     });
   }
 
@@ -133,7 +140,7 @@ export class MarkdownTranslator {
     const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
     return content.replace(linkRegex, (_match, text, url) => {
       // 只保护 URL，文本部分可以翻译
-      const protectedUrl = this.protectBlock(`(${url})`, 'link');
+      const protectedUrl = this.protectBlock(`(${url})`, "link");
       return `[${text}]${protectedUrl}`;
     });
   }
@@ -146,7 +153,7 @@ export class MarkdownTranslator {
     const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
     return content.replace(imageRegex, (match, _alt, _url) => {
       // 保护整个图片语法
-      return this.protectBlock(match, 'image');
+      return this.protectBlock(match, "image");
     });
   }
 
@@ -157,7 +164,7 @@ export class MarkdownTranslator {
     // 匹配 HTML 标签
     const htmlRegex = /<[^>]+>/g;
     return content.replace(htmlRegex, (match) => {
-      return this.protectBlock(match, 'html');
+      return this.protectBlock(match, "html");
     });
   }
 
@@ -201,9 +208,12 @@ export class MarkdownTranslator {
    * 翻译正文内容
    * 将内容分段，逐段翻译
    */
-  private async translateBody(content: string, targetLang: string): Promise<string> {
+  private async translateBody(
+    content: string,
+    targetLang: string,
+  ): Promise<string> {
     // 按段落分割
-    const paragraphs = content.split('\n\n');
+    const paragraphs = content.split("\n\n");
     const translatedParagraphs: string[] = [];
 
     for (const paragraph of paragraphs) {
@@ -216,7 +226,7 @@ export class MarkdownTranslator {
       }
     }
 
-    return translatedParagraphs.join('\n\n');
+    return translatedParagraphs.join("\n\n");
   }
 
   /**
@@ -229,14 +239,24 @@ export class MarkdownTranslator {
     // 全是占位符
     if (/^\{\{[A-Z_]+_\d+\}\}$/.test(trimmed)) return true;
     // 标题标记行（如 ## Title）
-    if (/^#{1,6}\s+/.test(trimmed) && !trimmed.slice(trimmed.indexOf(' ')).trim().match(/[a-zA-Z]/)) return false;
+    if (
+      /^#{1,6}\s+/.test(trimmed) &&
+      !trimmed
+        .slice(trimmed.indexOf(" "))
+        .trim()
+        .match(/[a-zA-Z]/)
+    )
+      return false;
     return false;
   }
 
   /**
    * 翻译单个段落
    */
-  private async translateParagraph(paragraph: string, targetLang: string): Promise<string> {
+  private async translateParagraph(
+    paragraph: string,
+    targetLang: string,
+  ): Promise<string> {
     try {
       // 如果是标题，提取标题内容翻译
       const headerMatch = paragraph.match(/^(#{1,6}\s+)(.+)$/);
@@ -245,7 +265,7 @@ export class MarkdownTranslator {
         const title = headerMatch[2];
         const translatedTitle = await this.aiProvider.translate(title, {
           to: targetLang,
-          context: '这是 Markdown 文档的标题'
+          context: "这是 Markdown 文档的标题",
         });
         return `${prefix}${translatedTitle}`;
       }
@@ -253,12 +273,15 @@ export class MarkdownTranslator {
       // 普通段落翻译
       const translated = await this.aiProvider.translate(paragraph, {
         to: targetLang,
-        context: '这是 Markdown 文档的正文内容，保持 Markdown 格式'
+        context: "这是 Markdown 文档的正文内容，保持 Markdown 格式",
       });
 
       return translated;
     } catch (error) {
-      console.error(chalk.red(`翻译段落失败: ${paragraph.slice(0, 50)}...`), error);
+      console.error(
+        chalk.red(`翻译段落失败: ${paragraph.slice(0, 50)}...`),
+        error,
+      );
       return paragraph;
     }
   }
@@ -268,17 +291,17 @@ export class MarkdownTranslator {
    */
   private async translateFrontmatter(
     frontmatter: Record<string, any>,
-    targetLang: string
+    targetLang: string,
   ): Promise<Record<string, any>> {
-    const fieldsToTranslate = ['title', 'description', 'summary', 'author'];
+    const fieldsToTranslate = ["title", "description", "summary", "author"];
     const result = { ...frontmatter };
 
     for (const field of fieldsToTranslate) {
-      if (typeof result[field] === 'string') {
+      if (typeof result[field] === "string") {
         try {
           result[field] = await this.aiProvider.translate(result[field], {
             to: targetLang,
-            context: '这是文档的元数据字段'
+            context: "这是文档的元数据字段",
           });
         } catch (error) {
           console.error(chalk.red(`翻译 frontmatter.${field} 失败`), error);

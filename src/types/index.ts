@@ -30,7 +30,7 @@ export interface BlogConfig {
 }
 
 export interface AIConfig {
-  provider: 'openai' | 'anthropic' | 'local';
+  provider: "openai" | "anthropic" | "local";
   apiKey?: string;
   baseUrl?: string;
   model?: string;
@@ -38,19 +38,19 @@ export interface AIConfig {
 
 // ==================== 风格类型 ====================
 
-export type CoverStyle = 
-  | 'tech'      // 科技风 - 蓝紫渐变
-  | 'minimal'   // 简约风 - 纯色背景
-  | 'gradient'  // 渐变风 - 多彩流体
-  | 'illustration' // 插画风 - 手绘温暖
-  | 'business'; // 商务风 - 深色金色
+export type CoverStyle =
+  | "tech" // 科技风 - 蓝紫渐变
+  | "minimal" // 简约风 - 纯色背景
+  | "gradient" // 渐变风 - 多彩流体
+  | "illustration" // 插画风 - 手绘温暖
+  | "business"; // 商务风 - 深色金色
 
 export type BlogStyle =
-  | 'release'      // 版本发布型
-  | 'tutorial'     // 教程型
-  | 'news'         // 新闻资讯型
-  | 'deep-dive'    // 深度分析型
-  | 'story';       // 故事型
+  | "release" // 版本发布型
+  | "tutorial" // 教程型
+  | "news" // 新闻资讯型
+  | "deep-dive" // 深度分析型
+  | "story"; // 故事型
 
 // ==================== 翻译相关类型 ====================
 
