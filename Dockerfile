@@ -22,7 +22,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm
 
 # 安装依赖
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install 
 
 # 复制源代码
 COPY . .
