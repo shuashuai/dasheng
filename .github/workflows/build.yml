@@ -68,16 +68,20 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            target: linux-x64
+            platform: linux
+            arch: x64
             pkg_target: node18-linux-x64
           - os: windows-latest
-            target: win-x64
+            platform: win32
+            arch: x64
             pkg_target: node18-win-x64
           - os: macos-latest
-            target: macos-x64
+            platform: darwin
+            arch: x64
             pkg_target: node18-macos-x64
           - os: macos-latest
-            target: macos-arm64
+            platform: darwin
+            arch: arm64
             pkg_target: node18-macos-arm64
     
     steps:
@@ -120,7 +124,7 @@ jobs:
     - name: Package executable
       run: |
         pnpm add -g pkg
-        pkg . --targets node18-${{ matrix.platform }}-${{ matrix.arch }} --output dasheng-${{ matrix.platform }}-${{ matrix.arch }}
+        pkg . --targets ${{ matrix.pkg_target }} --output dasheng-${{ matrix.platform }}-${{ matrix.arch }}
     
     - name: Upload executable (Unix)
       if: matrix.platform != 'win32'
