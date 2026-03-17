@@ -43,6 +43,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     
+    - name: Check ESLint config
+      run: cat .eslintrc.json || echo "No ESLint config found"
+    
     - name: Run linter
       run: pnpm lint
     

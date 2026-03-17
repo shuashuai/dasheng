@@ -12,10 +12,13 @@
     "dev": "tsx src/cli/index.ts",
     "start": "node dist/cli/index.js",
     "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
     "test": "vitest",
     "postinstall": "pnpm build",
-    "package": "pkg . --out-path=dist/"
+    "package": "pkg . --out-path=dist/",
+    "prepare": "husky install || true"
   },
   "keywords": [
     "cli",
@@ -74,12 +77,20 @@
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
     "eslint": "^8.56.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "pkg": "^5.8.1",
     "prettier": "^3.2.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
   },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YOUR_USERNAME/dasheng.git"
