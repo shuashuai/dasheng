@@ -23,6 +23,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
+    # 安装 Canvas 依赖
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++
+    
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
       with:
@@ -35,7 +41,9 @@ jobs:
         cache: 'pnpm'
     
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
+      env:
+        npm_config_build_from_source: false
     
     - name: Lint
       run: pnpm lint
@@ -52,7 +60,7 @@ jobs:
 
   # ============ 打包多平台可执行文件 ============
   package:
-    name: Package for ${{ matrix.os }}
+    name: Package for ${{ matrix.target }}
     needs: build
     runs-on: ${{ matrix.os }}
     
@@ -60,21 +68,34 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            platform: linux
-            arch: x64
+            target: linux-x64
+            pkg_target: node18-linux-x64
           - os: windows-latest
-            platform: win32
-            arch: x64
+            target: win-x64
+            pkg_target: node18-win-x64
           - os: macos-latest
-            platform: darwin
-            arch: x64
+            target: macos-x64
+            pkg_target: node18-macos-x64
           - os: macos-latest
-            platform: darwin
-            arch: arm64
+            target: macos-arm64
+            pkg_target: node18-macos-arm64
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+    
+    # 安装 Canvas 依赖 (Ubuntu)
+    - name: Install system dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++
+    
+    # 安装 Canvas 依赖 (macOS)
+    - name: Install system dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman python-setuptools
     
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
@@ -88,7 +109,9 @@ jobs:
         cache: 'pnpm'
     
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
+      env:
+        npm_config_build_from_source: false
     
     - name: Build
       run: pnpm build
@@ -162,6 +185,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
+    # 安装 Canvas 依赖
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++
+    
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
       with:
@@ -174,7 +203,9 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
+      env:
+        npm_config_build_from_source: false
     
     - name: Build
       run: pnpm build

@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "版本号 (例如: v1.0.0)"
+        description: '版本号 (例如: v1.0.0)'
         required: true
-        default: "v1.0.0"
+        default: 'v1.0.0'
       draft:
-        description: "是否为草稿版本"
+        description: '是否为草稿版本'
         type: boolean
         required: false
         default: false
@@ -21,40 +21,48 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build
-        run: pnpm build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # 安装 Canvas 依赖
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++
+    
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 9
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'pnpm'
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      env:
+        npm_config_build_from_source: false
+    
+    - name: Build
+      run: pnpm build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist
+        path: dist/
 
   # ============ 打包多平台可执行文件 ============
   package:
     name: Package ${{ matrix.target }}
     needs: build
     runs-on: ${{ matrix.os }}
-
+    
     strategy:
       matrix:
         include:
@@ -70,50 +78,65 @@ jobs:
           - os: macos-latest
             target: macos-arm64
             pkg_target: node18-macos-arm64
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build
-        run: pnpm build
-
-      - name: Install pkg
-        run: pnpm add -g pkg
-
-      - name: Package executable
-        run: pkg . --targets ${{ matrix.pkg_target }} --output dasheng-${{ matrix.target }}
-
-      - name: Create archive (Linux/macOS)
-        if: matrix.os != 'windows-latest'
-        run: |
-          chmod +x dasheng-${{ matrix.target }}
-          tar -czf dasheng-${{ matrix.target }}.tar.gz dasheng-${{ matrix.target }}
-
-      - name: Create archive (Windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          7z a dasheng-${{ matrix.target }}.zip dasheng-${{ matrix.target }}.exe
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dasheng-${{ matrix.target }}
-          path: |
-            dasheng-${{ matrix.target }}*
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # 安装 Canvas 依赖 (Ubuntu)
+    - name: Install system dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++
+    
+    # 安装 Canvas 依赖 (macOS)
+    - name: Install system dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman python-setuptools
+    
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 9
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      env:
+        npm_config_build_from_source: false
+    
+    - name: Build
+      run: pnpm build
+    
+    - name: Install pkg
+      run: pnpm add -g pkg
+    
+    - name: Package executable
+      run: pkg . --targets ${{ matrix.pkg_target }} --output dasheng-${{ matrix.target }}
+    
+    - name: Create archive (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        chmod +x dasheng-${{ matrix.target }}
+        tar -czf dasheng-${{ matrix.target }}.tar.gz dasheng-${{ matrix.target }}
+    
+    - name: Create archive (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        7z a dasheng-${{ matrix.target }}.zip dasheng-${{ matrix.target }}.exe
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dasheng-${{ matrix.target }}
+        path: |
+          dasheng-${{ matrix.target }}*
 
   # ============ 创建 Release ============
   release:
@@ -122,59 +145,59 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+    
+    - name: Display artifacts
+      run: |
+        echo "📦 构建产物列表:"
+        ls -la artifacts/
+        find artifacts/ -type f -name "dasheng-*"
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+        name: 🐵 大圣 ${{ github.event.inputs.version }}
+        draft: ${{ github.event.inputs.draft }}
+        generate_release_notes: true
+        files: |
+          artifacts/**/dasheng-*
+        body: |
+          ## 🎉 ${{ github.event.inputs.version }} 发布
 
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts/
+          ### 📥 下载安装
 
-      - name: Display artifacts
-        run: |
-          echo "📦 构建产物列表:"
-          ls -la artifacts/
-          find artifacts/ -type f -name "dasheng-*"
+          | 平台 | 下载链接 |
+          |------|----------|
+          | Windows (x64) | `dasheng-win-x64.zip` |
+          | Linux (x64) | `dasheng-linux-x64.tar.gz` |
+          | macOS (Intel) | `dasheng-macos-x64.tar.gz` |
+          | macOS (Apple Silicon) | `dasheng-macos-arm64.tar.gz` |
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.event.inputs.version }}
-          name: 🐵 大圣 ${{ github.event.inputs.version }}
-          draft: ${{ github.event.inputs.draft }}
-          generate_release_notes: true
-          files: |
-            artifacts/**/dasheng-*
-          body: |
-            ## 🎉 ${{ github.event.inputs.version }} 发布
+          ### 🚀 快速使用
 
-            ### 📥 下载安装
+          ```bash
+          # Windows
+          dasheng-win-x64.exe --help
 
-            | 平台 | 下载链接 |
-            |------|----------|
-            | Windows (x64) | `dasheng-win-x64.zip` |
-            | Linux (x64) | `dasheng-linux-x64.tar.gz` |
-            | macOS (Intel) | `dasheng-macos-x64.tar.gz` |
-            | macOS (Apple Silicon) | `dasheng-macos-arm64.tar.gz` |
+          # Linux / macOS
+          ./dasheng-linux-x64 --help
+          ```
 
-            ### 🚀 快速使用
+          ### 📖 文档
 
-            ```bash
-            # Windows
-            dasheng-win-x64.exe --help
+          - [用户使用手册](https://github.com/${{ github.repository }}/blob/main/docs/USER_GUIDE.md)
 
-            # Linux / macOS
-            ./dasheng-linux-x64 --help
-            ```
+          ---
 
-            ### 📖 文档
-
-            - [用户使用手册](https://github.com/${{ github.repository }}/blob/main/docs/USER_GUIDE.md)
-
-            ---
-
-            🐵 **大圣 - 72变无所不能，一棒扫清万难！**
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          🐵 **大圣 - 72变无所不能，一棒扫清万难！**
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

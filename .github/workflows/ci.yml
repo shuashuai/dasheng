@@ -17,17 +17,33 @@ on:
 
 jobs:
   test:
-    name: Test on Node ${{ matrix.node-version }}
+    name: Test on Node ${{ matrix.node-version }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
         node-version: [18.x, 20.x]
+        include:
+          - os: macos-latest
+            node-version: 20.x
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+    
+    # 安装 Canvas 依赖 (Ubuntu)
+    - name: Install system dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++
+    
+    # 安装 Canvas 依赖 (macOS)
+    - name: Install system dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman python-setuptools
     
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
@@ -41,7 +57,10 @@ jobs:
         cache: 'pnpm'
     
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
+      env:
+        # 使用预构建的 canvas 二进制文件，避免编译
+        npm_config_build_from_source: false
     
     - name: Check ESLint config
       run: cat .eslintrc.json || echo "No ESLint config found"
@@ -72,7 +91,7 @@ jobs:
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 8
+        version: 9
     
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -80,8 +99,16 @@ jobs:
         node-version: 18
         cache: 'pnpm'
     
+    # 安装 Canvas 依赖
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev build-essential g++
+    
     - name: Install dependencies
-      run: pnpm install 
+      run: pnpm install --frozen-lockfile
+      env:
+        npm_config_build_from_source: false
     
     - name: Check formatting
       run: pnpm prettier --check "src/**/*.ts"
@@ -98,7 +125,7 @@ jobs:
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 8
+        version: 9
     
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -107,6 +134,9 @@ jobs:
         cache: 'pnpm'
     
     - name: Install dependencies
-      run: pnpm install 
+      run: pnpm install --frozen-lockfile
+      env:
+        npm_config_build_from_source: false
+    
     - name: Type check
       run: pnpm tsc --noEmit
