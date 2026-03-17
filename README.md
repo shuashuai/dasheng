@@ -74,7 +74,7 @@ pnpm install -g dasheng
 npm install -g dasheng
 
 # 或使用 npx（无需安装）
-npx dasheng --help
+npx @code_shuai/dasheng --help
 ```
 
 ### 方式三：使用 Docker
