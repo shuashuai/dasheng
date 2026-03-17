@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.git/
+.github/
+docs/
+test/
+*.md
+.env
+.env.local
+.vscode/
+.idea/
+*.log
+*.tmp
+.cache/
+.covers/
+*.generated.md
+.dashengrc.json

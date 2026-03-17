@@ -1,0 +1,185 @@
+# 🐵 大圣 CLI - 构建与发布工作流
+
+name: Build & Release
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  # ============ 测试与构建 ============
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    
+    - name: Lint
+      run: pnpm lint
+    
+    - name: Build
+      run: pnpm build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-${{ matrix.node-version }}
+        path: dist/
+        retention-days: 7
+
+  # ============ 打包多平台可执行文件 ============
+  package:
+    name: Package for ${{ matrix.os }}
+    needs: build
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+          - os: windows-latest
+            platform: win32
+            arch: x64
+          - os: macos-latest
+            platform: darwin
+            arch: x64
+          - os: macos-latest
+            platform: darwin
+            arch: arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'pnpm'
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    
+    - name: Build
+      run: pnpm build
+    
+    # 使用 pkg 打包成可执行文件
+    - name: Package executable
+      run: |
+        pnpm add -g pkg
+        pkg . --targets node18-${{ matrix.platform }}-${{ matrix.arch }} --output dasheng-${{ matrix.platform }}-${{ matrix.arch }}
+    
+    - name: Upload executable (Unix)
+      if: matrix.platform != 'win32'
+      uses: actions/upload-artifact@v4
+      with:
+        name: dasheng-${{ matrix.platform }}-${{ matrix.arch }}
+        path: dasheng-${{ matrix.platform }}-${{ matrix.arch }}
+        retention-days: 30
+    
+    - name: Upload executable (Windows)
+      if: matrix.platform == 'win32'
+      uses: actions/upload-artifact@v4
+      with:
+        name: dasheng-${{ matrix.platform }}-${{ matrix.arch }}.exe
+        path: dasheng-${{ matrix.platform }}-${{ matrix.arch }}.exe
+        retention-days: 30
+
+  # ============ 创建 GitHub Release ============
+  release:
+    name: Create Release
+    needs: package
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+    
+    - name: List artifacts
+      run: ls -la artifacts/
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          artifacts/dasheng-linux-x64/dasheng-linux-x64
+          artifacts/dasheng-win32-x64/dasheng-win32-x64.exe
+          artifacts/dasheng-darwin-x64/dasheng-darwin-x64
+          artifacts/dasheng-darwin-arm64/dasheng-darwin-arm64
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ============ 发布到 npm ============
+  publish-npm:
+    name: Publish to npm
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    
+    - name: Build
+      run: pnpm build
+    
+    - name: Publish to npm
+      run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

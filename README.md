@@ -15,6 +15,99 @@
 - [用户使用手册](./docs/USER_GUIDE.md) - 完整的使用指南
 - [API 文档](./docs/API.md) - 开发接口文档（待完善）
 
+## 📥 下载安装
+
+### 方式一：一键安装脚本（推荐）
+
+**Linux / macOS：**
+```bash
+curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/dasheng/main/scripts/install.sh | bash
+```
+
+**Windows (PowerShell)：**
+```powershell
+irm https://raw.githubusercontent.com/YOUR_USERNAME/dasheng/main/scripts/install.ps1 | iex
+```
+
+### 方式二：直接下载可执行文件
+
+访问 [GitHub Releases](https://github.com/YOUR_USERNAME/dasheng/releases) 下载对应平台的可执行文件：
+
+| 平台 | 下载 | 大小 |
+|------|------|------|
+| Windows (x64) | `dasheng-win-x64.zip` | ~50MB |
+| Linux (x64) | `dasheng-linux-x64.tar.gz` | ~50MB |
+| macOS (Intel) | `dasheng-macos-x64.tar.gz` | ~50MB |
+| macOS (Apple Silicon) | `dasheng-macos-arm64.tar.gz` | ~50MB |
+
+**Windows 使用示例：**
+```bash
+# 解压下载的文件
+dasheng-win-x64.exe --help
+
+# 或重命名为 dasheng.exe 使用
+dasheng.exe translate-yaml ./en.yaml --target ./locales/
+```
+
+**Linux / macOS 使用示例：**
+```bash
+# 解压
+tar -xzf dasheng-linux-x64.tar.gz
+
+# 添加执行权限
+chmod +x dasheng-linux-x64
+
+# 使用
+./dasheng-linux-x64 --help
+
+# 可选：移动到 PATH 目录
+sudo mv dasheng-linux-x64 /usr/local/bin/dasheng
+```
+
+### 方式二：通过 npm 安装
+
+```bash
+# 使用 pnpm（推荐）
+pnpm install -g dasheng
+
+# 或使用 npm
+npm install -g dasheng
+
+# 或使用 npx（无需安装）
+npx dasheng --help
+```
+
+### 方式三：使用 Docker
+
+```bash
+# 拉取镜像
+docker pull ghcr.io/YOUR_USERNAME/dasheng:latest
+
+# 使用容器运行
+docker run --rm \
+  -v $(pwd):/workdir \
+  -w /workdir \
+  ghcr.io/YOUR_USERNAME/dasheng:latest \
+  translate-yaml ./en.yaml --target ./locales/
+```
+
+### 方式四：从源码构建
+
+```bash
+# 克隆仓库
+git clone https://github.com/YOUR_USERNAME/dasheng.git
+cd dasheng
+
+# 安装依赖
+pnpm install
+
+# 构建
+pnpm build
+
+# 运行
+node dist/cli/index.js --help
+```
+
 ## 📦 安装
 
 ```bash
