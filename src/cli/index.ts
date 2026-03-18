@@ -107,6 +107,16 @@ program
     await generateBlogCommand(file, options);
   });
 
+// ==================== 通背猿猴·TUI 交互界面 ====================
+program
+  .command("tui")
+  .alias("ui")
+  .description("🖥️  通背猿猴 - 启动交互式 TUI 界面")
+  .action(async () => {
+    const { startTUI } = await import("../tui/index.js");
+    await startTUI();
+  });
+
 // ==================== 元神配置 ====================
 program
   .command("config")

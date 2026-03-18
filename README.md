@@ -146,6 +146,30 @@ echo '{"ai":{"provider":"openai","apiKey":"your-key"}}' > ~/.dashengrc.json
 
 ### 2. 使用神通
 
+#### 🖥️ 方式一：TUI 交互界面（推荐）
+
+```bash
+# 启动交互式 TUI 界面
+dasheng tui
+# 或
+dasheng ui
+```
+
+TUI 界面提供可视化交互体验：
+- 🏠 **首页** - 快速入口导航
+- 🌐 **语言通** - YAML 多语言翻译向导
+- 📝 **译真经** - Markdown 翻译向导
+- 🎨 **画皮术** - 封面生成向导
+- ✍️ **妙笔生花** - 博客生成向导
+
+**键盘操作：**
+- `← →` / `Tab` - 切换 Tab
+- `↑ ↓` - 选择功能或选项
+- `Enter` - 确认
+- `q` / `Ctrl+C` - 退出
+
+#### ⌨️ 方式二：CLI 命令行
+
 ```bash
 # 🌐 语言通 - YAML 翻译
 dasheng translate-yaml ./locales/en.yaml --target ./locales/
@@ -169,7 +193,7 @@ dasheng generate-blog ./RELEASE_NOTES.md --style release
 ## 🗺️ 路线图
 
 - [x] v1.0 石猴出世 - CLI 工具 ✅
-- [ ] v2.0 通背猿猴 - TUI 交互界面
+- [x] v2.0 通背猿猴 - TUI 交互界面 ✅
 - [ ] v3.0 六耳猕猴 - VS Code 插件
 - [ ] v4.0 斗战胜佛 - Web 界面
 
