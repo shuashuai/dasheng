@@ -51,11 +51,23 @@ Phase 5
 - [x] 更新版本号到 2.0.0
 - **Status:** complete
 
-### Phase 6: 发布准备
-- [ ] 更新 package.json 命令
-- [ ] 更新 README 文档
-- [ ] 打 tag 发布 v2.0.0
-- **Status:** pending
+### Phase 6: 发布准备 ✅
+- [x] 创建 git commit (86ebbee)
+- [x] 创建 git tag (v2.0.0)
+- [x] 创建发布说明 (docs/RELEASE_v2.0.0.md)
+- **Status:** complete
+
+### 推送命令
+```bash
+# 推送提交到远程
+git push origin main
+
+# 推送标签到远程
+git push origin v2.0.0
+```
+
+## Current Phase
+**所有阶段已完成 ✅**
 
 ## Key Questions (已解答)
 1. ✅ 选择哪个 TUI 库？**Ink 4.x + React 18** (组件化, Flexbox, TypeScript 支持好)
