@@ -72,7 +72,7 @@ jobs:
       run: pnpm build
     
     - name: Run tests
-      run: pnpm test --run
+      run: pnpm vitest run
       env:
         DASHENG_MOCK: true
     
