@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'vscode-extension/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'vscode-extension/**'
+
+defaults:
+  run:
+    working-directory: ./vscode-extension
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './vscode-extension/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript type check
+        run: npm run check-types
+
+      - name: ESLint check
+        run: npm run lint
+
+      - name: Build
+        run: npm run compile
+
+      - name: Package
+        run: npm run package
+
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './vscode-extension/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+        if: false # 暂时禁用，等添加测试后再启用

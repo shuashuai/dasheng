@@ -1,0 +1,16 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd vscode-extension
+
+echo "🔍 运行代码检查..."
+
+# TypeScript 类型检查
+echo "📦 TypeScript 类型检查..."
+npm run check-types || exit 1
+
+# ESLint 检查
+echo "🔍 ESLint 检查..."
+npm run lint || exit 1
+
+echo "✅ 所有检查通过！"

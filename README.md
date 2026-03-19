@@ -108,6 +108,52 @@ pnpm build
 node dist/cli/index.js --help
 ```
 
+## 🔌 VS Code 插件安装
+
+### 从市场安装
+
+1. 打开 VS Code
+2. 进入扩展面板 (`Ctrl+Shift+X`)
+3. 搜索 "大圣" 或 "Dasheng"
+4. 点击安装
+
+### 从源码安装
+
+```bash
+cd dasheng/vscode-extension
+
+# 安装依赖
+npm install
+
+# 代码检查
+npm run lint
+
+# 编译构建
+npm run compile
+
+# 按 F5 启动调试模式
+```
+
+### 开发验证
+
+```bash
+# 一键验证（类型检查 + ESLint + 构建）
+npm run compile
+
+# 单独检查
+npm run check-types  # TypeScript 类型检查
+npm run lint         # ESLint 检查
+npm run lint:fix     # 自动修复
+npm run format       # 代码格式化
+```
+
+### 快捷键
+
+- `Ctrl+Shift+D` - 打开大圣面板
+- `Ctrl+Shift+T` - 翻译选中文本
+
+[查看完整文档](./vscode-extension/README.md)
+
 ## 📦 安装
 
 ```bash
@@ -194,8 +240,20 @@ dasheng generate-blog ./RELEASE_NOTES.md --style release
 
 - [x] v1.0 石猴出世 - CLI 工具 ✅
 - [x] v2.0 通背猿猴 - TUI 交互界面 ✅
-- [ ] v3.0 六耳猕猴 - VS Code 插件
+- [x] v3.0 六耳猕猴 - VS Code 插件 ✅
 - [ ] v4.0 斗战胜佛 - Web 界面
+
+### VS Code 插件功能
+
+🐵 **六耳猕猴** - IDE 化身，现已发布！
+
+- 🌐 **YAML 翻译** - 右键一键翻译，自动同步多语言
+- 📝 **Markdown 翻译** - 选中文本即译，保护代码块
+- 🎨 **封面生成** - 5种风格，多种比例
+- ✍️ **博客生成** - 从 Release Notes 自动生成
+- 🖥️ **可视化面板** - Dashboard + 侧边栏双视图
+
+[查看详情](./vscode-extension/README.md) | [安装使用](#vscode-插件安装)
 
 ## 📄 License
 

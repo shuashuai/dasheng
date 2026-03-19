@@ -19,8 +19,9 @@
 
 backend:
   base:
+    test: This is a test message.
     success:
-      other: Success.
+      other: Success edited.
     unknown:
       other: Unknown error.
     request_format_error:
@@ -2391,5 +2392,3 @@ ui:
     copy: Copy to clipboard
     copied: Copied
     external_content_warning: External images/media are not displayed.
-
-

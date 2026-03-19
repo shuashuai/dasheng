@@ -1,0 +1,40 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+
+# 日志
+*.log
+npm-debug.log*
+
+# 环境变量
+.env
+.env.local
+
+# IDE
+.idea
+.vscode/settings.json
+.vscode/launch.json
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 测试覆盖率
+coverage
+.nyc_output
+
+# ESLint 缓存
+.eslintcache
+
+# Prettier 缓存
+.prettiercache
+
+# 构建输出
+out/
+dist/
+
+# VS Code
+.vscode-test/
+*.vsix

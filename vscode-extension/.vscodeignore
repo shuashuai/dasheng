@@ -1,0 +1,38 @@
+.vscode/**
+.vscode-test/**
+src/**
+.gitignore
+.yarnrc
+vsc-extension-quickstart.md
+**/tsconfig.json
+**/.eslintrc.json
+**/*.map
+**/*.ts
+!**/*.d.ts
+node_modules/**
+out/**
+.eslintrc.js
+webpack.config.js
+.vscode-test/**
+.github/**
+docs/**
+*.vsix
+
+# 开发文件
+.git
+.gitignore
+.editorconfig
+.prettierrc
+jest.config.js
+coverage/**
+.nyc_output/**
+.eslintcache
+.prettiercache
+
+# 文档
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+
+# 构建工具
+esbuild.js

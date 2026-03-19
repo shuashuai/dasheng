@@ -1,0 +1,351 @@
+{
+  "name": "dasheng-vscode",
+  "displayName": "🐵 大圣 Dasheng - AI 开发助手",
+  "description": "超越贾维斯的 AI 开发助手 - YAML翻译、MD翻译、封面生成、博客写作",
+  "version": "3.0.0",
+  "publisher": "code-shuai",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "translation",
+    "i18n",
+    "markdown",
+    "yaml",
+    "blog",
+    "cover",
+    "generator",
+    "dasheng"
+  ],
+  "activationEvents": [
+    "onCommand:dasheng.translateYaml",
+    "onCommand:dasheng.translateMarkdown",
+    "onCommand:dasheng.generateCover",
+    "onCommand:dasheng.generateBlog",
+    "onView:dasheng.sidebar",
+    "onLanguage:yaml",
+    "onLanguage:markdown"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dasheng.translateYaml",
+        "title": "🌐 语言通 - 翻译 YAML",
+        "category": "大圣"
+      },
+      {
+        "command": "dasheng.translateYamlQuick",
+        "title": "🌐 快速翻译 YAML",
+        "category": "大圣"
+      },
+      {
+        "command": "dasheng.translateMarkdown",
+        "title": "📝 译真经 - 翻译 Markdown",
+        "category": "大圣"
+      },
+      {
+        "command": "dasheng.translateMarkdownQuick",
+        "title": "📝 快速翻译 Markdown",
+        "category": "大圣"
+      },
+      {
+        "command": "dasheng.generateCover",
+        "title": "🎨 画皮术 - 生成封面",
+        "category": "大圣"
+      },
+      {
+        "command": "dasheng.generateCoverForFile",
+        "title": "🎨 为当前文件生成封面",
+        "category": "大圣"
+      },
+      {
+        "command": "dasheng.generateBlog",
+        "title": "✍️ 妙笔生花 - 生成博客",
+        "category": "大圣"
+      },
+      {
+        "command": "dasheng.openDashboard",
+        "title": "🏠 打开大圣面板",
+        "category": "大圣",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "dasheng.openSettings",
+        "title": "⚙️ 打开设置",
+        "category": "大圣",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "dasheng.translateSelection",
+        "title": "翻译选中文本",
+        "category": "大圣"
+      },
+      {
+        "command": "dasheng.refreshSidebar",
+        "title": "刷新侧边栏",
+        "category": "大圣",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "dasheng.translateYamlQuick",
+          "when": "false"
+        },
+        {
+          "command": "dasheng.translateMarkdownQuick",
+          "when": "false"
+        },
+        {
+          "command": "dasheng.generateCoverForFile",
+          "when": "false"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "dasheng.translateYamlQuick",
+          "when": "resourceExtname == .yaml || resourceExtname == .yml",
+          "group": "dasheng@1"
+        },
+        {
+          "command": "dasheng.translateMarkdownQuick",
+          "when": "resourceExtname == .md",
+          "group": "dasheng@2"
+        },
+        {
+          "command": "dasheng.generateCoverForFile",
+          "when": "resourceExtname == .md",
+          "group": "dasheng@3"
+        },
+        {
+          "submenu": "dasheng",
+          "group": "dasheng@0"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "dasheng.translateSelection",
+          "when": "editorHasSelection",
+          "group": "dasheng@1"
+        },
+        {
+          "command": "dasheng.translateYamlQuick",
+          "when": "resourceExtname == .yaml || resourceExtname == .yml",
+          "group": "dasheng@2"
+        },
+        {
+          "command": "dasheng.translateMarkdownQuick",
+          "when": "resourceExtname == .md",
+          "group": "dasheng@3"
+        }
+      ],
+      "dasheng": [
+        {
+          "command": "dasheng.translateYaml",
+          "group": "translation@1"
+        },
+        {
+          "command": "dasheng.translateMarkdown",
+          "group": "translation@2"
+        },
+        {
+          "command": "dasheng.generateCover",
+          "group": "generation@1"
+        },
+        {
+          "command": "dasheng.generateBlog",
+          "group": "generation@2"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "dasheng",
+        "label": "🐵 大圣",
+        "icon": "$(zap)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "dasheng.sidebar",
+          "name": "🐵 大圣助手",
+          "when": "true",
+          "icon": "$(zap)",
+          "contextualTitle": "大圣助手"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dasheng",
+          "title": "大圣 Dasheng",
+          "icon": "$(zap)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "🐵 大圣 Dasheng",
+      "properties": {
+        "dasheng.ai.provider": {
+          "type": "string",
+          "default": "openai",
+          "enum": ["openai", "anthropic", "local"],
+          "enumDescriptions": [
+            "OpenAI API",
+            "Anthropic Claude API",
+            "本地模型"
+          ],
+          "description": "AI 服务提供商"
+        },
+        "dasheng.ai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "AI API 密钥（建议使用环境变量 DASHENG_API_KEY）"
+        },
+        "dasheng.ai.baseUrl": {
+          "type": "string",
+          "default": "",
+          "description": "自定义 API 基础 URL（用于第三方兼容服务）"
+        },
+        "dasheng.ai.model": {
+          "type": "string",
+          "default": "gpt-3.5-turbo",
+          "description": "使用的 AI 模型"
+        },
+        "dasheng.translation.defaultTargetLangs": {
+          "type": "array",
+          "default": ["zh-CN", "ja-JP", "ko-KR"],
+          "description": "默认目标语言列表"
+        },
+        "dasheng.translation.preserveFormat": {
+          "type": "boolean",
+          "default": true,
+          "description": "翻译时保留原文格式"
+        },
+        "dasheng.cover.defaultStyle": {
+          "type": "string",
+          "default": "tech",
+          "enum": ["tech", "minimal", "gradient", "illustration", "business"],
+          "enumDescriptions": [
+            "科技风 - 深蓝紫渐变",
+            "简约风 - 极简纯色",
+            "渐变风 - 多彩流体",
+            "插画风 - 手绘温暖",
+            "商务风 - 深色专业"
+          ],
+          "description": "默认封面风格"
+        },
+        "dasheng.cover.defaultRatio": {
+          "type": "string",
+          "default": "16:9",
+          "enum": ["16:9", "1:1", "9:16", "4:3", "21:9"],
+          "description": "默认封面比例"
+        },
+        "dasheng.blog.defaultStyle": {
+          "type": "string",
+          "default": "release",
+          "enum": ["release", "tutorial", "news", "deep-dive", "story"],
+          "enumDescriptions": [
+            "版本发布型",
+            "教程指南型",
+            "新闻资讯型",
+            "深度分析型",
+            "故事叙述型"
+          ],
+          "description": "默认博客风格"
+        },
+        "dasheng.general.autoDetectChanges": {
+          "type": "boolean",
+          "default": true,
+          "description": "自动检测 YAML 文件变化并提示同步"
+        },
+        "dasheng.general.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "显示操作通知"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "dasheng.openDashboard",
+        "key": "ctrl+shift+d",
+        "mac": "cmd+shift+d",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "dasheng.translateSelection",
+        "key": "ctrl+shift+t",
+        "mac": "cmd+shift+t",
+        "when": "editorHasSelection"
+      }
+    ],
+    "icons": {
+      "dasheng-icon": {
+        "description": "大圣图标",
+        "default": {
+          "fontPath": "./media/icons.woff2",
+          "fontCharacter": "\\E001"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "test": "node ./out/test/runTest.js",
+    "prepare": "husky install || true"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.8",
+    "esbuild": "^0.19.11",
+    "eslint": "^8.56.0",
+    "@types/glob": "^8.1.0",
+    "glob": "^10.3.10",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.0",
+    "openai": "^4.28.0"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
