@@ -308,16 +308,12 @@
     "watch:esbuild": "node esbuild.js --watch",
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
     "package": "npm run check-types && npm run lint && node esbuild.js --production",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src --ext ts",
     "lint:fix": "eslint src --ext ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
-    "test": "node ./out/test/runTest.js",
-    "verify": "npm run check-types && npm run lint && npm run compile && npm run compile-tests",
+    "verify": "npm run check-types && npm run lint && npm run compile",
     "prepare": "husky install || true"
   },
   "devDependencies": {

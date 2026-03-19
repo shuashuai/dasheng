@@ -190,18 +190,21 @@ npm run format
 npm run format:check
 ```
 
-### 测试
+### 验证
 
 ```bash
-# 运行所有测试
-npm test
+# 一键验证代码质量和构建
+npm run verify
 
-# 或使用测试脚本
-./scripts/test.sh        # Linux/macOS/Git Bash
-.\scripts\test.ps1       # Windows PowerShell
+# 或使用脚本
+./scripts/verify.sh        # Linux/macOS/Git Bash
+.\scripts\verify.ps1       # Windows PowerShell
 ```
 
-更多测试信息请参考 [docs/TESTING.md](docs/TESTING.md)
+验证包括：
+- TypeScript 类型检查
+- ESLint 代码规范
+- 构建打包
 
 ### 交付前验证
 

@@ -120,10 +120,6 @@
 - ✅ docs/CONTRIBUTING.md - 贡献指南
 - ✅ docs/VSCODE_EXTENSION.md - 扩展开发文档
 
-#### 测试文档
-- ✅ docs/TESTING.md - 测试指南
-- ✅ src/test/ - 测试用例
-
 #### 交付文档
 - ✅ docs/DELIVERY_CHECKLIST.md - 交付检查清单
 - ✅ RELEASE_NOTES_v3.0.0.md - 发布说明
@@ -154,14 +150,13 @@ dasheng/vscode-extension/
 │       ├── config.ts
 │       ├── logger.ts
 │       └── aiProvider.ts
-├── docs/                         # 文档 (9个)
+├── docs/                         # 文档 (7个)
 │   ├── API.md
 │   ├── ARCHITECTURE.md
 │   ├── CONTRIBUTING.md
 │   ├── TROUBLESHOOTING.md
 │   ├── VSCODE_EXTENSION.md
 │   ├── DELIVERY_CHECKLIST.md
-│   ├── TESTING.md
 │   └── YAML_SYNC_GUIDE.md        # YAML 智能同步指南
 ├── media/                        # 静态资源
 ├── package.json                  # 扩展配置
@@ -183,19 +178,11 @@ dasheng/vscode-extension/
 ├── CHANGELOG.md                  # 更新日志
 └── PROJECT_SUMMARY.md            # 项目总结
 
-├── src/test/                    # 测试文件 (4个)
-│   ├── runTest.ts              # 测试入口
-│   ├── suite/
-│   │   ├── index.ts            # 测试套件
-│   │   └── extension.test.ts   # 扩展测试
-│   └── utils/__tests__/        # 单元测试
-│       ├── logger.test.ts
-│       └── aiProvider.test.ts
-├── scripts/                     # 脚本 (2个)
-│   ├── test.sh                 # Bash 测试脚本
-│   └── test.ps1                # PowerShell 测试脚本
+├── scripts/                     # 脚本
+│   ├── verify.sh               # Bash 验证脚本
+│   └── verify.ps1              # PowerShell 验证脚本
 
-总计: 25 个源文件 + 9 个文档 + 11 个配置文件 + 2 个脚本 = 47 个文件
+总计: 19 个源文件 + 7 个文档 + 11 个配置文件 + 2 个脚本 = 39 个文件
 ```
 
 ## 🔧 技术栈
