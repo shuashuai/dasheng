@@ -3,8 +3,12 @@
   "displayName": "🐵 大圣 Dasheng - AI 开发助手",
   "description": "超越贾维斯的 AI 开发助手 - YAML翻译、MD翻译、封面生成、博客写作",
   "version": "3.0.0",
-  "publisher": "code-shuai",
+  "publisher": "codeshuai",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shuashuai/dasheng"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -200,7 +204,11 @@
         "dasheng.ai.provider": {
           "type": "string",
           "default": "openai",
-          "enum": ["openai", "anthropic", "local"],
+          "enum": [
+            "openai",
+            "anthropic",
+            "local"
+          ],
           "enumDescriptions": [
             "OpenAI API",
             "Anthropic Claude API",
@@ -225,7 +233,11 @@
         },
         "dasheng.translation.defaultTargetLangs": {
           "type": "array",
-          "default": ["zh-CN", "ja-JP", "ko-KR"],
+          "default": [
+            "zh-CN",
+            "ja-JP",
+            "ko-KR"
+          ],
           "description": "默认目标语言列表"
         },
         "dasheng.translation.preserveFormat": {
@@ -236,7 +248,13 @@
         "dasheng.cover.defaultStyle": {
           "type": "string",
           "default": "tech",
-          "enum": ["tech", "minimal", "gradient", "illustration", "business"],
+          "enum": [
+            "tech",
+            "minimal",
+            "gradient",
+            "illustration",
+            "business"
+          ],
           "enumDescriptions": [
             "科技风 - 深蓝紫渐变",
             "简约风 - 极简纯色",
@@ -249,13 +267,25 @@
         "dasheng.cover.defaultRatio": {
           "type": "string",
           "default": "16:9",
-          "enum": ["16:9", "1:1", "9:16", "4:3", "21:9"],
+          "enum": [
+            "16:9",
+            "1:1",
+            "9:16",
+            "4:3",
+            "21:9"
+          ],
           "description": "默认封面比例"
         },
         "dasheng.blog.defaultStyle": {
           "type": "string",
           "default": "release",
-          "enum": ["release", "tutorial", "news", "deep-dive", "story"],
+          "enum": [
+            "release",
+            "tutorial",
+            "news",
+            "deep-dive",
+            "story"
+          ],
           "enumDescriptions": [
             "版本发布型",
             "教程指南型",
@@ -303,20 +333,22 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "compile": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
     "watch": "npm-run-all -p watch:*",
     "watch:esbuild": "node esbuild.js --watch",
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
     "check-types": "tsc --noEmit",
     "lint": "eslint src --ext ts",
     "lint:fix": "eslint src --ext ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
-    "verify": "npm run check-types && npm run lint && npm run compile",
-    "prepare": "husky install || true"
+    "verify": "pnpm run check-types && pnpm run lint && pnpm run compile",
+    "prepare": "husky install || true",
+    "vsix": "pnpm run verify && pnpm exec vsce package --no-dependencies"
   },
   "devDependencies": {
+    "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
     "@types/vscode": "^1.85.0",
@@ -324,9 +356,9 @@
     "@typescript-eslint/parser": "^6.15.0",
     "@vscode/test-cli": "^0.0.4",
     "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^3.7.1",
     "esbuild": "^0.19.11",
     "eslint": "^8.56.0",
-    "@types/glob": "^8.1.0",
     "glob": "^10.3.10",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",

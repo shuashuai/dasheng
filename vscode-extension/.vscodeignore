@@ -36,3 +36,20 @@ SECURITY.md
 
 # 构建工具
 esbuild.js
+scripts/**
+
+# 开发文档
+PROJECT_SUMMARY.md
+RELEASE_NOTES_v*.md
+.vscode/settings.json
+
+# 包管理
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Husky
+.husky/**
+
+# 开发配置（保留 out/ 用于类型定义）
+!out/**/*.d.ts
