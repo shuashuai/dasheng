@@ -4,7 +4,7 @@
 $ErrorActionPreference = "Stop"
 
 # 配置
-$Repo = "YOUR_USERNAME/dasheng"
+$Repo = "shuashuai/dasheng"
 $InstallDir = "$env:LOCALAPPDATA\Programs\dasheng"
 $BinaryName = "dasheng.exe"
 

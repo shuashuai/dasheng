@@ -118,7 +118,7 @@ jobs:
       run: pnpm add -g pkg
     
     - name: Package executable
-      run: pkg . --targets ${{ matrix.pkg_target }} --output dasheng-${{ matrix.target }}
+      run: pkg . --targets ${{ matrix.pkg_target }} --output dasheng-${{ matrix.target }} --debug
     
     - name: Create archive (Linux/macOS)
       if: matrix.os != 'windows-latest'

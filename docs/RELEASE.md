@@ -45,7 +45,6 @@ GitHub Actions 会自动：
 |------|------|------|
 | GitHub Releases | `https://github.com/USER/REPO/releases` | 可执行文件下载 |
 | npm | `npm install -g dasheng` | Node.js 包 |
-| Docker Hub | `docker pull ghcr.io/USER/dasheng` | 容器镜像 |
 | 一键安装 | `curl -fsSL .../install.sh \| bash` | 快速安装 |
 
 ## 🔧 配置 Secrets
@@ -62,27 +61,11 @@ GitHub Actions 会自动：
 2. 创建 "Automation" 类型的 token
 3. 复制 token 添加到 GitHub Secrets
 
-## 🐳 Docker 镜像
-
-自动构建的镜像标签：
-
-| 标签 | 说明 |
-|------|------|
-| `latest` | 最新稳定版 |
-| `v1.0.0` | 特定版本 |
-| `main` | 最新开发版 |
-
-使用示例：
-```bash
-docker run --rm ghcr.io/YOUR_USERNAME/dasheng:latest --help
-```
-
 ## 📝 发布后的检查
 
 1. 检查 GitHub Releases 是否创建成功
 2. 验证可执行文件是否能正常下载运行
 3. 检查 npm 包是否更新（如果启用了 npm 发布）
-4. 验证 Docker 镜像是否可拉取
 
 ## 🆘 故障排除
 
@@ -97,7 +80,6 @@ docker run --rm ghcr.io/YOUR_USERNAME/dasheng:latest --help
 
 - 版本号已存在 → 使用新的版本号
 - npm 发布失败 → 检查 NPM_TOKEN 是否有效
-- Docker 推送失败 → 检查 GITHUB_TOKEN 权限
 
 ---
 

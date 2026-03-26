@@ -14,7 +14,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # 配置
-REPO="YOUR_USERNAME/dasheng"
+REPO="shuashuai/dasheng"
 INSTALL_DIR="/usr/local/bin"
 BINARY_NAME="dasheng"
 

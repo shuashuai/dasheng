@@ -43,7 +43,7 @@ irm https://raw.githubusercontent.com/shuashuai/dasheng/main/scripts/install.ps1
 **Windows 使用示例：**
 ```bash
 # 解压下载的文件
-dasheng-win-x64.exe --help
+dasheng-win32-x64.exe --help
 
 # 或重命名为 dasheng.exe 使用
 dasheng.exe translate-yaml ./en.yaml --target ./locales/
@@ -64,34 +64,20 @@ chmod +x dasheng-linux-x64
 sudo mv dasheng-linux-x64 /usr/local/bin/dasheng
 ```
 
-### 方式二：通过 npm 安装
+### 方式三：通过 npm 安装
 
 ```bash
 # 使用 pnpm（推荐）
-pnpm install -g dasheng
+pnpm install -g @code_shuai/dasheng
 
 # 或使用 npm
-npm install -g dasheng
+npm install -g @code_shuai/dasheng
 
 # 或使用 npx（无需安装）
 npx @code_shuai/dasheng --help
 ```
 
-### 方式三：使用 Docker
-
-```bash
-# 拉取镜像
-docker pull ghcr.io/shuashuai/dasheng:latest
-
-# 使用容器运行
-docker run --rm \
-  -v $(pwd):/workdir \
-  -w /workdir \
-  ghcr.io/shuashuai/dasheng:latest \
-  translate-yaml ./en.yaml --target ./locales/
-```
-
-### 方式四：从源码构建
+### 方式三：从源码构建
 
 ```bash
 # 克隆仓库
@@ -105,7 +91,7 @@ pnpm install
 pnpm build
 
 # 运行
-node dist/cli/index.js --help
+node bin/dasheng.js --help
 ```
 
 ## 🔌 VS Code 插件安装
@@ -158,10 +144,10 @@ npm run format       # 代码格式化
 
 ```bash
 # 使用 pnpm（推荐）
-pnpm install -g dasheng
+pnpm install -g @code_shuai/dasheng
 
 # 或使用 npm
-npm install -g dasheng
+npm install -g @code_shuai/dasheng
 ```
 
 ## 🚀 快速开始

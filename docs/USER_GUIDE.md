@@ -62,7 +62,7 @@ pnpm link --global
 
 ```bash
 # 不全局安装，直接使用
-node dist/cli.js --help
+node bin/dasheng.js --help
 ```
 
 ---
@@ -576,7 +576,7 @@ jobs:
       - uses: pnpm/action-setup@v2
       - run: pnpm install
       - run: pnpm build
-      - run: node dist/cli.js translate-yaml ./locales/en.yaml --target ./locales/
+      - run: node bin/dasheng.js translate-yaml ./locales/en.yaml --target ./locales/
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: https://api.deepseek.com/v1
