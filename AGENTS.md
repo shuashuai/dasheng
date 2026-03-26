@@ -7,18 +7,42 @@
 每次提交代码前，**必须**确保以下检查全部通过：
 
 ```bash
-# 1. 代码格式检查
+# 1. 版本号检查
+# 确保 package.json 和 src/cli/index.ts 中的版本号一致
+# 且是新版本（npm 不允许覆盖已发布版本）
+
+# 2. 代码格式检查
 npm run format:check
 
-# 2. TypeScript 类型检查
+# 3. TypeScript 类型检查
 npx tsc --noEmit
 
-# 3. ESLint 检查
+# 4. ESLint 检查
 npm run lint
 
-# 4. 构建测试
+# 5. 构建测试
 npm run build
 ```
+
+### 版本号检查
+
+**发布前必须更新版本号**：
+
+1. 检查当前已发布的最新版本：
+   ```bash
+   npm view @code_shuai/dasheng version
+   ```
+
+2. 更新以下文件中的版本号：
+   - `package.json` 中的 `"version"` 字段
+   - `src/cli/index.ts` 中的 `packageJson.version`
+
+3. 确保新版本号 > 已发布版本号
+
+**版本号格式**：遵循 SemVer，如 `3.0.5`
+- 主版本号：重大变更
+- 次版本号：新功能
+- 修订号：bug 修复
 
 ### 自动修复
 
