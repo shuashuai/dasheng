@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./dist/cli/index.js",
   "bin": {
-    "dasheng": "./dist/cli/index.js"
+    "dasheng": "./bin/dasheng.js"
   },
   "scripts": {
     "build": "tsc",
@@ -41,10 +41,16 @@
     "scripts": [
       "dist/**/*.js"
     ],
-    "assets": [],
+    "assets": [
+      "bin/**/*"
+    ],
     "targets": [
-      "node18-win-x64"
-    ]
+      "node18-linux-x64",
+      "node18-win-x64",
+      "node18-macos-x64",
+      "node18-macos-arm64"
+    ],
+    "outputPath": "dist"
   },
   "dependencies": {
     "@inkjs/ui": "^2.0.0",
