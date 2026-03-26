@@ -102,11 +102,12 @@ jobs:
         brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman python-setuptools
     
     # Windows 上使用预编译 canvas (避免从源码构建)
-    - name: Configure Windows canvas
+    - name: Setup Canvas for Windows
       if: runner.os == 'Windows'
+      shell: pwsh
       run: |
-        npm config set canvas_binary_host_mirror https://registry.npmmirror.com/-/binary/canvas
-        npm config set canvas_local_prebuilt_binary_fallback true
+        echo "CANVAS_BINARY_HOST_MIRROR=https://registry.npmmirror.com/-/binary/canvas" >> $env:GITHUB_ENV
+        echo "CANVAS_LOCAL_PREBUILT_BINARY_FALLBACK=true" >> $env:GITHUB_ENV
     
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
