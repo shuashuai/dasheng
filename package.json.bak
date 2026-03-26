@@ -2,7 +2,7 @@
   "name": "@code_shuai/dasheng",
   "version": "2.0.0",
   "description": "🐵 大圣 - 72变无所不能，超越贾维斯的AI助手",
-  "type": "commonjs",
+  "type": "module",
   "main": "./dist/cli/index.js",
   "bin": {
     "dasheng": "./dist/cli/index.js"
