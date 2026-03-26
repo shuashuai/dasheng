@@ -96,6 +96,12 @@ jobs:
       run: |
         brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman python-setuptools
     
+    # 安装 Canvas 依赖 (Windows)
+    - name: Install windows-build-tools
+      if: runner.os == 'Windows'
+      run: |
+        npm install -g windows-build-tools
+    
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
       with:
