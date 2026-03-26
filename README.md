@@ -21,17 +21,17 @@
 
 **Linux / macOS：**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/dasheng/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/shuashuai/dasheng/main/scripts/install.sh | bash
 ```
 
 **Windows (PowerShell)：**
 ```powershell
-irm https://raw.githubusercontent.com/YOUR_USERNAME/dasheng/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/shuashuai/dasheng/main/scripts/install.ps1 | iex
 ```
 
 ### 方式二：直接下载可执行文件
 
-访问 [GitHub Releases](https://github.com/YOUR_USERNAME/dasheng/releases) 下载对应平台的可执行文件：
+访问 [GitHub Releases](https://github.com/shuashuai/dasheng/releases) 下载对应平台的可执行文件：
 
 | 平台 | 下载 | 大小 |
 |------|------|------|
@@ -81,13 +81,13 @@ npx @code_shuai/dasheng --help
 
 ```bash
 # 拉取镜像
-docker pull ghcr.io/YOUR_USERNAME/dasheng:latest
+docker pull ghcr.io/shuashuai/dasheng:latest
 
 # 使用容器运行
 docker run --rm \
   -v $(pwd):/workdir \
   -w /workdir \
-  ghcr.io/YOUR_USERNAME/dasheng:latest \
+  ghcr.io/shuashuai/dasheng:latest \
   translate-yaml ./en.yaml --target ./locales/
 ```
 
@@ -95,7 +95,7 @@ docker run --rm \
 
 ```bash
 # 克隆仓库
-git clone https://github.com/YOUR_USERNAME/dasheng.git
+git clone https://github.com/shuashuai/dasheng.git
 cd dasheng
 
 # 安装依赖
