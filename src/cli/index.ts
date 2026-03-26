@@ -9,7 +9,7 @@ import { program } from "commander";
 import chalk from "chalk";
 
 const packageJson = {
-  version: "3.0.3",
+  version: "3.0.4",
 };
 
 // Logo (简化，避免 Windows Canvas 问题)
